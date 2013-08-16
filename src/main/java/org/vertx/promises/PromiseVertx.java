@@ -4,7 +4,7 @@
 package org.vertx.promises;
 
 import org.vertx.java.core.Vertx;
-import org.vertx.promises.impl.DefaultPromiseBus;
+import org.vertx.promises.impl.DefaultPromiseEventBus;
 
 /**
  * @author richard
@@ -19,7 +19,7 @@ public class PromiseVertx {
 	}
 
 	public PromiseEventBus promiseBus() {
-		return new DefaultPromiseBus(vertx.eventBus());
+		return new DefaultPromiseEventBus(vertx.eventBus());
 	}
 
 }

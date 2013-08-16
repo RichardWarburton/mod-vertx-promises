@@ -4,6 +4,7 @@
 package org.vertx.promises.unit;
 
 import static org.vertx.testtools.VertxAssert.assertEquals;
+import static org.vertx.testtools.VertxAssert.assertTrue;
 import static org.vertx.testtools.VertxAssert.testComplete;
 
 import org.junit.Test;
@@ -12,7 +13,6 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.testtools.TestVerticle;
-import org.vertx.testtools.VertxAssert;
 
 /**
  * @author richard
@@ -28,7 +28,7 @@ public class NormalVerticleTest extends TestVerticle {
 		container.deployVerticle(StubVerticle.class.getName(), new Handler<AsyncResult<String>>() {
 			@Override
 			public void handle(final AsyncResult<String> event) {
-				VertxAssert.assertTrue(event.succeeded());
+				assertTrue(event.succeeded());
 				final EventBus eb = vertx.eventBus();
 				eb.send("a", Q, new Handler<Message<String>>() {
 					@Override
@@ -47,6 +47,28 @@ public class NormalVerticleTest extends TestVerticle {
 								});
 							}
 						});
+					}
+				});
+			}
+		});
+	}
+
+	@Test
+	public void replyNestingOfDoom() {
+		final EventBus eb = vertx.eventBus();
+		eb.registerHandler("testVerticle", new Handler<Message<String>>() {
+			@Override
+			public void handle(final Message<String> event) {
+				assertEquals("abc", event.body());
+				testComplete();
+			}
+		}, new Handler<AsyncResult<Void>>() {
+			@Override
+			public void handle(final AsyncResult<Void> event) {
+				container.deployVerticle(SenderVerticle.class.getName(), new Handler<AsyncResult<String>>() {
+					@Override
+					public void handle(final AsyncResult<String> event) {
+						assertTrue(event.succeeded());
 					}
 				});
 			}

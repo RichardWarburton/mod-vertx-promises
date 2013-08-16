@@ -3,6 +3,8 @@
  */
 package org.vertx.promises;
 
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 
 /**
@@ -13,5 +15,10 @@ public interface PromiseEventBus {
 
 	Promise<Message<String>> send(String address, String message);
 
-	// TODO: register handler
+	@SuppressWarnings("rawtypes")
+	Promise<? extends Message> registerHandler(String address);
+
+	@SuppressWarnings("rawtypes")
+	Promise<? extends Message> registerHandler(final String address, Handler<AsyncResult<Void>> handler);
+
 }
