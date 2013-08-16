@@ -44,12 +44,13 @@ public class DefaultPromise<E> implements Promise<E> {
 	 * @see org.vertx.promises.Promise#compose(org.vertx.promises.Promise, org.vertx.promises.Combiner)
 	 */
 	@Override
-	public <R, T> Promise<T> compose(final Promise<R> nextAction, final Combiner<E, R, T> combiner) {
+	public <R, T> Promise<T> compose(final Function<E, Promise<R>> nextAction, final Combiner<E, R, T> combiner) {
 		final DefaultPromise<T> next = new DefaultPromise<>();
 		setDelegate(new Handler<E>() {
 			@Override
 			public void handle(final E thisEvent) {
-				nextAction.then(new Handler<R>() {
+				final Promise<R> nextResult = nextAction.handle(thisEvent);
+				nextResult.then(new Handler<R>() {
 					@Override
 					public void handle(final R nextEvent) {
 						final Promise<T> newEvent = combiner.combine(thisEvent, nextEvent);

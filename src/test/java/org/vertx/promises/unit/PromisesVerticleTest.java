@@ -23,9 +23,9 @@ import org.vertx.testtools.TestVerticle;
  * @author richard
  *
  */
-public class PromisesVerticle extends TestVerticle {
+public class PromisesVerticleTest extends TestVerticle {
 
-	private static final String Q = "whatsUp";
+	private static final String Q = "whats up ";
 
 	// Collects messages from 'a' and 'b', send them to 'c' and check response
 	@Test
@@ -39,48 +39,25 @@ public class PromisesVerticle extends TestVerticle {
 				@Override
 				public Promise<Message<String>> handle(final AsyncResult<String> from) {
 					assertTrue(from.succeeded());
-					System.out.println("STGART");
-					return bus.send("a", Q);
+					return bus.send("a", Q + "a");
 				}
-			}).compose(bus.send("b", Q), new Combiner<Message<String>, Message<String>, Message<String>>() {
+			}).compose(new Function<Message<String>, Promise<Message<String>>>() {
+				@Override
+				public Promise<Message<String>> handle(final Message<String> from) {
+					return bus.send("b", Q + "b");
+				}
+			}, new Combiner<Message<String>, Message<String>, Message<String>>() {
 				@Override
 				public Promise<Message<String>> combine(final Message<String> left, final Message<String> right) {
-					System.out.println("STGART2");
 					return bus.send("c", left.body() + " " + right.body());
 				}
 		    }).then(new Handler<Message<String>>() {
 				@Override
 				public void handle(final Message<String> cReply) {
-					System.out.println("STGART3");
 					assertEquals("hello world", cReply.body());
 					testComplete();
 				}
 		    });
-	}
-
-	@Test
-	public void sigh() {
-		final PromiseVertx vertx = new PromiseVertx(this.vertx);
-		final PromiseBus bus = vertx.promiseBus();
-		container.deployVerticle(StubVerticle.class.getName(), new Handler<AsyncResult<String>>() {
-			@Override
-			public void handle(final AsyncResult<String> event) {
-				bus.send("a", Q).compose(bus.send("b", Q), new Combiner<Message<String>, Message<String>, Message<String>>() {
-					@Override
-					public Promise<Message<String>> combine(final Message<String> left, final Message<String> right) {
-						System.out.println("STGART2");
-						return bus.send("c", left.body() + " " + right.body());
-					}
-			    }).then(new Handler<Message<String>>() {
-					@Override
-					public void handle(final Message<String> cReply) {
-						System.out.println("STGART3");
-						assertEquals("hello world", cReply.body());
-						testComplete();
-					}
-			    });
-			}
-		});
 	}
 
 }

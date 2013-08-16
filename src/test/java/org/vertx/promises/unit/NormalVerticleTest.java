@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.vertx.promises.unit;
 
@@ -12,12 +12,13 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.testtools.TestVerticle;
+import org.vertx.testtools.VertxAssert;
 
 /**
  * @author richard
- * 
+ *
  */
-public class NormalVerticle extends TestVerticle {
+public class NormalVerticleTest extends TestVerticle {
 
 	private static final String Q = "whatsUp";
 
@@ -27,6 +28,7 @@ public class NormalVerticle extends TestVerticle {
 		container.deployVerticle(StubVerticle.class.getName(), new Handler<AsyncResult<String>>() {
 			@Override
 			public void handle(final AsyncResult<String> event) {
+				VertxAssert.assertTrue(event.succeeded());
 				final EventBus eb = vertx.eventBus();
 				eb.send("a", Q, new Handler<Message<String>>() {
 					@Override

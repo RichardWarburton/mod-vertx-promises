@@ -16,6 +16,6 @@ public interface Promise<E> extends Handler<E> {
 
 	public <T> Promise<T> bind(Function<E, Promise<T>> mapper);
 
-	public <R, T> Promise<T> compose(Promise<R> promise, Combiner<E, R, T> combiner);
+	public <R, T> Promise<T> compose(Function<E, Promise<R>> promise, Combiner<E, R, T> combiner);
 
 }
