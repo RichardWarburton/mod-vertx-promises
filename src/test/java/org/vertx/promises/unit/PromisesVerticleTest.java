@@ -14,7 +14,7 @@ import org.vertx.java.core.eventbus.Message;
 import org.vertx.promises.Combiner;
 import org.vertx.promises.Function;
 import org.vertx.promises.Promise;
-import org.vertx.promises.PromiseBus;
+import org.vertx.promises.PromiseEventBus;
 import org.vertx.promises.PromiseContainer;
 import org.vertx.promises.PromiseVertx;
 import org.vertx.testtools.TestVerticle;
@@ -31,7 +31,7 @@ public class PromisesVerticleTest extends TestVerticle {
 	@Test
 	public void notNestingOfDoom() {
 		final PromiseVertx vertx = new PromiseVertx(this.vertx);
-		final PromiseBus bus = vertx.promiseBus();
+		final PromiseEventBus bus = vertx.promiseBus();
 		final PromiseContainer container = new PromiseContainer(this.container);
 		container
 			.deployVerticle(StubVerticle.class.getName())

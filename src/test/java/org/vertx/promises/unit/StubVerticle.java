@@ -44,7 +44,7 @@ public class StubVerticle extends Verticle {
 	}
 
 	public void reply(final Message<String> msg, final String reply) {
-		System.out.println("Sending: " + reply + " in response to " + msg.body());
+//		System.out.println("Sending: " + reply + " in response to " + msg.body());
 		msg.reply(reply);
 	}
 

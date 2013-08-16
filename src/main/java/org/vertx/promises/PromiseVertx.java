@@ -18,7 +18,7 @@ public class PromiseVertx {
 		this.vertx = vertx;
 	}
 
-	public PromiseBus promiseBus() {
+	public PromiseEventBus promiseBus() {
 		return new DefaultPromiseBus(vertx.eventBus());
 	}
 

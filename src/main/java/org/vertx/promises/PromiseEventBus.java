@@ -9,7 +9,7 @@ import org.vertx.java.core.eventbus.Message;
  * @author richard
  *
  */
-public interface PromiseBus {
+public interface PromiseEventBus {
 
 	Promise<Message<String>> send(String address, String message);
 
