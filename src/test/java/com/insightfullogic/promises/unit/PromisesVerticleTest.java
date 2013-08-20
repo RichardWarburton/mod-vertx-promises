@@ -22,6 +22,7 @@ import static org.vertx.testtools.VertxAssert.testComplete;
 import org.junit.Test;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.testtools.TestVerticle;
 
@@ -72,5 +73,30 @@ public class PromisesVerticleTest extends TestVerticle {
 				}
 		    });
 	}
+
+    @Test
+    public void replyNestingOfDoom() {
+        final PromiseVertx vertx = new PromiseVertx(this.vertx);
+        final PromiseContainer container = new PromiseContainer(this.container);
+
+        vertx.promiseBus()
+             .registerHandler("testVerticle", new Handler<Message<String>>() {
+            @Override
+            public void handle(final Message<String> event) {
+                assertEquals("abc", event.body());
+                testComplete();
+            }
+        }).bind(new Function<AsyncResult<Void>, Promise<AsyncResult<String>>>() {
+            @Override
+            public Promise<AsyncResult<String>> handle(AsyncResult<Void> from) {
+                return container.deployVerticle(SenderVerticle.class.getName());
+            }
+        }).then(new Handler<AsyncResult<String>>() {
+            @Override
+            public void handle(final AsyncResult<String> event) {
+                assertTrue(event.succeeded());
+            }
+        });
+    }
 
 }

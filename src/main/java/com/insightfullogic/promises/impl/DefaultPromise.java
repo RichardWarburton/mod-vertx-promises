@@ -35,7 +35,7 @@ public class DefaultPromise<E> implements Promise<E> {
 		this(null);
 	}
 
-	DefaultPromise(final Handler<E> delegate) {
+	public DefaultPromise(final Handler<E> delegate) {
 		setDelegate(delegate);
 		awaitingHandler = false;
 	}

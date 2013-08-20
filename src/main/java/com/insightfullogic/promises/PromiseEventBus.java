@@ -32,6 +32,6 @@ public interface PromiseEventBus {
 
 	// TODO: take a handler of promise, as an argument, and return the result as a promise.
 	@SuppressWarnings("rawtypes")
-	Handler<AsyncResult<Void>> registerHandler(final String address, Handler<? extends Message> handler);
+	Promise<AsyncResult<Void>> registerHandler(final String address, Handler<? extends Message> handler);
 
 }

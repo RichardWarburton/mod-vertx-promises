@@ -58,7 +58,7 @@ public class DefaultPromiseEventBus implements PromiseEventBus {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public Handler<AsyncResult<Void>> registerHandler(String address, Handler<? extends Message> handler) {
+    public Promise<AsyncResult<Void>> registerHandler(String address, Handler<? extends Message> handler) {
         final Promise<AsyncResult<Void>> resultHandler = new DefaultPromise<>();
         eventBus.registerHandler(address, handler, resultHandler);
         return resultHandler;
