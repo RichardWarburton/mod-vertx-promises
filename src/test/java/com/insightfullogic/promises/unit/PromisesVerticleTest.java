@@ -1,7 +1,19 @@
-/**
+/*
+ * Copyright 2013 Richard Warburton <richard.warburton@gmail.com>
  *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.vertx.promises.unit;
+package com.insightfullogic.promises.unit;
 
 import static org.vertx.testtools.VertxAssert.assertEquals;
 import static org.vertx.testtools.VertxAssert.assertTrue;
@@ -11,13 +23,14 @@ import org.junit.Test;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
-import org.vertx.promises.Combiner;
-import org.vertx.promises.Function;
-import org.vertx.promises.Promise;
-import org.vertx.promises.PromiseEventBus;
-import org.vertx.promises.PromiseContainer;
-import org.vertx.promises.PromiseVertx;
 import org.vertx.testtools.TestVerticle;
+
+import com.insightfullogic.promises.Combiner;
+import com.insightfullogic.promises.Function;
+import com.insightfullogic.promises.Promise;
+import com.insightfullogic.promises.PromiseContainer;
+import com.insightfullogic.promises.PromiseEventBus;
+import com.insightfullogic.promises.PromiseVertx;
 
 /**
  * @author richard

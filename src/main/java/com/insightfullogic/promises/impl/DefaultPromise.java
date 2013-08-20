@@ -1,12 +1,25 @@
-/**
+/*
+ * Copyright 2013 Richard Warburton <richard.warburton@gmail.com>
  *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package org.vertx.promises.impl;
+package com.insightfullogic.promises.impl;
 
 import org.vertx.java.core.Handler;
-import org.vertx.promises.Combiner;
-import org.vertx.promises.Function;
-import org.vertx.promises.Promise;
+
+import com.insightfullogic.promises.Combiner;
+import com.insightfullogic.promises.Function;
+import com.insightfullogic.promises.Promise;
 
 /**
  * @author richard
@@ -41,7 +54,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see org.vertx.promises.Promise#compose(org.vertx.promises.Promise, org.vertx.promises.Combiner)
+	 * @see com.insightfullogic.promises.Promise#compose(com.insightfullogic.promises.Promise, com.insightfullogic.promises.Combiner)
 	 */
 	@Override
 	public <R, T> Promise<T> compose(final Function<E, Promise<R>> nextAction, final Combiner<E, R, T> combiner) {
@@ -63,7 +76,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see org.vertx.promises.Promise#then(org.vertx.java.core.Handler)
+	 * @see com.insightfullogic.promises.Promise#then(org.vertx.java.core.Handler)
 	 */
 	@Override
 	public Promise<Void> then(final Handler<E> nextAction) {
@@ -79,7 +92,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see org.vertx.promises.Promise#using(org.vertx.promises.Function)
+	 * @see com.insightfullogic.promises.Promise#using(com.insightfullogic.promises.Function)
 	 */
 	@Override
 	public <T> Promise<T> using(final Function<E, T> mapper) {
@@ -95,7 +108,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see org.vertx.promises.Promise#bind(org.vertx.promises.Function)
+	 * @see com.insightfullogic.promises.Promise#bind(com.insightfullogic.promises.Function)
 	 */
 	@Override
 	public <T> Promise<T> bind(final Function<E, Promise<T>> mapper) {
