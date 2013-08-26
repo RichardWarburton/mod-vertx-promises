@@ -66,14 +66,56 @@ public class DefaultPromise<E> implements Promise<E> {
 				nextResult.then(new Handler<R>() {
 					@Override
 					public void handle(final R nextEvent) {
-						final Promise<T> newEvent = combiner.combine(thisEvent, nextEvent);
-						newEvent.then(next);
+						combiner.combine(thisEvent, nextEvent)
+						        .then(next);
 					}
 				});
 			}
 		});
 		return next;
 	}
+	
+	@Override
+	public <L, R, T> Promise<T> diamond(final Function<E, Promise<L>> left, final Function<E, Promise<R>> right, final Combiner<L, R, T> combiner) {
+        final DefaultPromise<T> next = new DefaultPromise<>();
+        setDelegate(new Handler<E>() {
+
+            private Object stash = null;
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void handle(final E thisEvent) {
+                final Promise<L> leftResult = left.handle(thisEvent);
+                final Promise<R> rightResult = right.handle(thisEvent);
+                leftResult.then(new Handler<L>() {
+                    @Override
+                    public void handle(L left) {
+                        if (stash == null) {
+                            stash = left;
+                        } else {
+                            combiner.combine(left, (R) stash)
+                                    .then(next);
+                        }
+                    }
+                });
+                
+                rightResult.then(new Handler<R>() {
+                    @Override
+                    public void handle(R right) {
+                        if (stash == null) {
+                            stash = right;
+                        } else {
+                            combiner.combine((L) stash, right)
+                                    .then(next);
+                        }
+                    }
+                });
+            }
+        });
+        return next;
+    }
+
+
 
 	/**
 	 * @see com.insightfullogic.promises.Promise#then(org.vertx.java.core.Handler)

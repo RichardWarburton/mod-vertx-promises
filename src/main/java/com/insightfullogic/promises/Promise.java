@@ -30,4 +30,6 @@ public interface Promise<E> extends Handler<E> {
 
 	public <R, T> Promise<T> compose(Function<E, Promise<R>> promise, Combiner<E, R, T> combiner);
 
+	public <L, R, T> Promise<T> diamond(Function<E, Promise<L>> left, Function<E, Promise<R>> right, Combiner<L, R, T> combiner);
+
 }

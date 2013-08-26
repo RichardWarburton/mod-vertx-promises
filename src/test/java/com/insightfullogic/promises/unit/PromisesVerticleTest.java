@@ -73,6 +73,38 @@ public class PromisesVerticleTest extends TestVerticle {
 				}
 		    });
 	}
+	
+	@Test
+    public void parallelNotNestingOfDoom() {
+        final PromiseVertx vertx = new PromiseVertx(this.vertx);
+        final PromiseEventBus bus = vertx.promiseBus();
+        final PromiseContainer container = new PromiseContainer(this.container);
+        container.deployVerticle(StubVerticle.class.getName())
+        .diamond(new Function<AsyncResult<String>, Promise<Message<String>>>() {
+            @Override
+            public Promise<Message<String>> handle(AsyncResult<String> from) {
+                assertTrue(from.succeeded());
+                return bus.send("a", Q + "a");
+            }
+        }, new Function<AsyncResult<String>, Promise<Message<String>>>() {
+            @Override
+            public Promise<Message<String>> handle(AsyncResult<String> from) {
+                assertTrue(from.succeeded());
+                return bus.send("b", Q + "b");
+            }
+        }, new Combiner<Message<String>, Message<String>, Message<String>>() {
+            @Override
+            public Promise<Message<String>> combine(Message<String> left, Message<String> right) {
+                return bus.send("c", left.body() + " " + right.body());
+            }
+        }).then(new Handler<Message<String>>() {
+            @Override
+            public void handle(final Message<String> cReply) {
+                assertEquals("hello world", cReply.body());
+                testComplete();
+            }
+        });
+    }
 
     @Test
     public void replyNestingOfDoom() {
