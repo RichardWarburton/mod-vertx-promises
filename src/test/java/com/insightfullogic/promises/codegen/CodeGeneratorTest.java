@@ -11,7 +11,7 @@ import org.vertx.java.core.eventbus.EventBus;
 
 public class CodeGeneratorTest {
 
-    private static final CodeGenerator generator = new CodeGenerator(EventBus.class, Api.INST.pkg);
+    private static final ClassInspector generator = new ClassInspector(EventBus.class, Api.INST.pkg);
     
     @Test
     public void classRenaming() {

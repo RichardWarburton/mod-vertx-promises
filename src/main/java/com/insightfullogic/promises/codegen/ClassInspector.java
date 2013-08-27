@@ -3,19 +3,18 @@ package com.insightfullogic.promises.codegen;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.vertx.java.core.Handler;
 
-public class CodeGenerator {
+public class ClassInspector {
 
     private Class<?> klass;
     private String pkg;
 
-    public CodeGenerator(Class<?> klass, String pkg) {
+    public ClassInspector(Class<?> klass, String pkg) {
         this.klass = klass;
         this.pkg = pkg;
     }
