@@ -9,38 +9,38 @@ import org.junit.Test;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 
-public class CodeGeneratorTest {
+public class CodeInspectorTest {
 
-    private static final ClassInspector generator = new ClassInspector(EventBus.class, Api.INST.pkg);
+    private static final ClassInspector inspector = new ClassInspector(EventBus.class, Api.INST.pkg);
     
     @Test
     public void classRenaming() {
-        assertEquals("com.insightfullogic.promises.EventBus", generator.getGeneratedName());
+        assertEquals("com.insightfullogic.promises.EventBus", inspector.getGeneratedName());
     }
 
     @Test
     public void requiresConversion() {
-        assertTrue(generator.requiresConversion(asList(Integer.class, Handler.class)));
+        assertTrue(inspector.requiresConversion(asList(Integer.class, Handler.class)));
     }
 
     @Test
     public void doesNotRequireConversion() {
-        assertFalse(generator.requiresConversion(asList(Integer.class, EventBus.class)));
+        assertFalse(inspector.requiresConversion(asList(Integer.class, EventBus.class)));
     }
 
     @Test
     public void singleHandler() {
-        assertFalse(generator.multiplehandlers(asList(Integer.class, Handler.class)));
+        assertFalse(inspector.multiplehandlers(asList(Integer.class, Handler.class)));
     }
 
     @Test
     public void multipleHandlers() {
-        assertTrue(generator.multiplehandlers(asList(Integer.class, Handler.class, Handler.class)));
+        assertTrue(inspector.multiplehandlers(asList(Integer.class, Handler.class, Handler.class)));
     }
     
     @Test
     public void generatesExample() {
-        generator.generate();
+        inspector.generate();
     }
 
 }
