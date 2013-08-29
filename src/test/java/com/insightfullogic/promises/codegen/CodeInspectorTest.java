@@ -1,21 +1,31 @@
 package com.insightfullogic.promises.codegen;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 
+
 public class CodeInspectorTest {
 
-    private static final ClassInspector inspector = new ClassInspector(EventBus.class, Api.INST.pkg);
-    
-    @Test
-    public void classRenaming() {
-        assertEquals("com.insightfullogic.promises.EventBus", inspector.getGeneratedName());
+	private JavaSourceGenerator generator;
+    private ClassInspector inspector;
+
+    @Before
+    public void setup() {
+    	generator = mock(JavaSourceGenerator.class);
+    	inspector = new ClassInspector(EventBus.class, generator);
     }
 
     @Test
@@ -37,10 +47,20 @@ public class CodeInspectorTest {
     public void multipleHandlers() {
         assertTrue(inspector.multiplehandlers(asList(Integer.class, Handler.class, Handler.class)));
     }
-    
+
     @Test
-    public void generatesExample() {
-        inspector.generate();
+    public void inspectsMethod() throws Exception {
+    	Method unregisterHandler = EventBus.class.getMethod("unregisterHandler", String.class, Handler.class);
+        inspector.inspectMethod(unregisterHandler);
+        ParameterizedType lastType = (ParameterizedType) unregisterHandler.getGenericParameterTypes()[1];
+        Type bound = lastType.getActualTypeArguments()[0];
+        verify(generator).convertMethod("unregisterHandler", bound, Arrays.<Class<?>>asList(String.class));
+    }
+
+    @Test
+    public void inspectsClass() throws Exception {
+    	inspector.inspect();
+    	verify(generator).newClass(EventBus.class);
     }
 
 }

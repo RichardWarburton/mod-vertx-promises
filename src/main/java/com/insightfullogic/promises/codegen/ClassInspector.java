@@ -3,8 +3,9 @@ package com.insightfullogic.promises.codegen;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.vertx.java.core.Handler;
@@ -12,45 +13,56 @@ import org.vertx.java.core.Handler;
 public class ClassInspector {
 
     private Class<?> klass;
-    private String pkg;
+	private ClassGenerator backend;
 
-    public ClassInspector(Class<?> klass, String pkg) {
+    public ClassInspector(Class<?> klass, ClassGenerator backend) {
         this.klass = klass;
-        this.pkg = pkg;
+		this.backend = backend;
     }
 
-    public void generate() {
-        String generatedName = getGeneratedName();
+    public void inspect() {
+    	backend.newClass(klass);
         for (Method method : klass.getDeclaredMethods()) {
-            List<Class<?>> parameterTypes = new ArrayList<>(asList(method.getParameterTypes()));
-            if (!requiresConversion(parameterTypes)) {
-                // TODO: just delegate
-                continue;
-            }
-
-            if(multiplehandlers(parameterTypes)) {
-                // TODO: add support for this
-                continue;
-            }
-
-            if (!hasSimpleReturnType(method)) {
-                // TODO: add support for this
-                continue;
-            }
-            
-            System.out.println(method);
-            Class<?> lastType = parameterTypes.get(lastIndex(parameterTypes));
-//            TypeVariable<?> typeParameter = lastType.getTypeParameters()[0];
-//            System.out.println(Arrays.toString(typeParameter.getBounds()));
-//            System.out.println(Arrays.asList(typeParameter));
-            System.out.println("Method: " + Arrays.toString(method.getTypeParameters()));
-            
-            System.out.println(lastType);
-            System.out.println(lastType.getGenericSuperclass());
+            inspectMethod(method);
         }
     }
 
-    private boolean hasSimpleReturnType(Method method) {
+	public void inspectMethod(Method method) {
+		List<Class<?>> parameterTypes = new ArrayList<>(asList(method.getParameterTypes()));
+		if (!requiresConversion(parameterTypes)) {
+			// TODO: wrap method
+		    return;
+		}
+
+		if(multiplehandlers(parameterTypes)) {
+		    return;
+		}
+
+		if (!hasSimpleReturnType(method)) {
+			// TODO: figure out if this ever happens?
+		    return;
+		}
+
+		int lastIndex = lastIndex(parameterTypes);
+		parameterTypes.remove(lastIndex);
+		Type lastType = method.getGenericParameterTypes()[lastIndex];
+		Type returnBound = getReturnBound(lastType);
+		backend.convertMethod(method.getName(), returnBound, parameterTypes);
+
+		return;
+	}
+
+	public Type getReturnBound(Type lastType) {
+		if (lastType instanceof ParameterizedType) {
+			ParameterizedType paramHolder = (ParameterizedType) lastType;
+			return paramHolder.getActualTypeArguments()[0];
+		} else if (lastType instanceof Class<?>) {
+			return null;
+		}
+		throw new IllegalArgumentException("Don't know what to do with: " + lastType);
+	}
+
+	private boolean hasSimpleReturnType(Method method) {
         Class<?> returnType = method.getReturnType();
         return Void.TYPE == returnType || returnType == klass;
     }
@@ -66,10 +78,6 @@ public class ClassInspector {
 
     private int lastIndex(List<Class<?>> parameterTypes) {
         return parameterTypes.size() - 1;
-    }
-
-    String getGeneratedName() {
-        return pkg + "." + klass.getSimpleName();
     }
 
 }

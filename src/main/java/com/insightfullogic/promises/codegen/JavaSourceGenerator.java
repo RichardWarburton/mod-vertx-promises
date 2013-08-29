@@ -7,8 +7,13 @@ import static com.sun.codemodel.JMod.PUBLIC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.insightfullogic.promises.Promise;
@@ -29,26 +34,40 @@ import com.sun.codemodel.JVar;
 
 public class JavaSourceGenerator implements ClassGenerator {
 
-    private static final String GENERATED_SOURCES_DIR = "generated-sources";
+	public static final String DEFAULT_PKG = "com.insightfullogic.promises.impl";
+	public static final String DEFAULT_PREFIX = "Promise";
 
-	private final JCodeModel code;
+    public static final String GENERATED_SOURCES_DIR = "target/generated-sources";
+
+	final JCodeModel code;
 
     private final JClass promise;
     private final JClass defaultPromise;
 
     private JDefinedClass klass;
 
-    public JavaSourceGenerator() {
-        code = new JCodeModel();
+	private String pkgName;
+
+	private String classPrefix;
+
+	public JavaSourceGenerator() {
+		this(DEFAULT_PKG, DEFAULT_PREFIX);
+	}
+
+	// TODO: common package prefix
+    public JavaSourceGenerator(String pkgName, String classPrefix) {
+        this.pkgName = pkgName;
+		this.classPrefix = classPrefix;
+		code = new JCodeModel();
         promise = code.directClass(Promise.class.getName());
         defaultPromise = code.directClass(DefaultPromise.class.getName());
     }
 
     @Override
-    public void newClass(String pkgName, String name, String wrappedClass) {
+    public void newClass(Class<?> wrappedClass) {
         JPackage pkg = code._package(pkgName);
-        makeClass(name, pkg);
-        makeConstructor(wrappedClass);
+        makeClass(classPrefix+wrappedClass.getSimpleName(), pkg);
+        makeConstructor(wrappedClass.getName());
     }
 
 	private void makeConstructor(String wrappedClassName) {
@@ -71,12 +90,16 @@ public class JavaSourceGenerator implements ClassGenerator {
 	}
 
     @Override
-    public void newMethod(String name, Class<?> returnBound, List<Class<?>> parameterTypes) {
-    	JClass typeParameter = code.directClass(returnBound.getName()).wildcard();
+    public void convertMethod(String name, Type returnBound, List<Class<?>> parameterTypes) {
+    	List<TypeVariable<?>> bindings = new ArrayList<>();
+
+    	JClass typeParameter = convertType(returnBound, bindings);
     	JClass returnType = promise.narrow(typeParameter);
 
     	// Eg: public Promise<? extends Message> registerHandler(final String address) {
     	JMethod method = klass.method(PUBLIC, returnType, name);
+    	rebindGenerics(typeParameter, method, bindings);
+
     	List<JVar> parameters = generateParameters(parameterTypes, method);
         JBlock body = method.body();
 
@@ -89,6 +112,53 @@ public class JavaSourceGenerator implements ClassGenerator {
         // Eg: return promise;
         body._return(promiseVar);
     }
+
+	JClass convertType(Type returnBound, List<TypeVariable<?>> bindings) {
+		if (returnBound instanceof Class) {
+			return makeClass(returnBound);
+		}
+
+		if (returnBound instanceof WildcardType) {
+			WildcardType wildcard = (WildcardType) returnBound;
+			return makeClass(wildcard.getUpperBounds()[0]).wildcard();
+		}
+
+		if (returnBound instanceof TypeVariable<?>) {
+			bindings.add((TypeVariable<?>) returnBound);
+			// gets rebound once the method is created
+			return code.NULL;
+		}
+
+		if (returnBound instanceof ParameterizedType) {
+			ParameterizedType parameterized = (ParameterizedType) returnBound;
+			JClass rawType = makeClass(parameterized.getRawType());
+
+			List<JClass> typeArguments = new ArrayList<>();
+			for (Type type : parameterized.getActualTypeArguments()) {
+				typeArguments.add(convertType(type, bindings));
+			}
+			return rawType.narrow(typeArguments);
+		}
+
+		throw new IllegalArgumentException("Don't know what to do with: " + returnBound);
+	}
+
+	void rebindGenerics(JClass typeParameter, JMethod method, List<TypeVariable<?>> bindings) {
+		Iterator<TypeVariable<?>> it = bindings.iterator();
+		List<JClass> typeParameters = typeParameter.getTypeParameters();
+		for (int i = 0; i < typeParameters.size(); i++) {
+			JClass typeParam = typeParameters.get(i);
+			if (typeParam == code.NULL) {
+				String name = it.next().getName();
+				typeParameters.set(i, method.generify(name));
+			}
+		}
+	}
+
+	private JClass makeClass(Type type) {
+		Class<?> cls = (Class<?>) type;
+		return code.directClass(cls.getName());
+	}
 
 	/**
 	 * @param name

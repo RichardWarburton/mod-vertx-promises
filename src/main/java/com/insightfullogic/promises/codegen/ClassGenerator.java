@@ -1,12 +1,13 @@
 package com.insightfullogic.promises.codegen;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public interface ClassGenerator {
 
-	public void newClass(String pkg, String name, String wrappedClass);
+	public void newClass(Class<?> wrappedClass);
 
-    public void newMethod(String name, Class<?> returnType, List<Class<?>> parameters);
+    public void convertMethod(String name, Type returnBound, List<Class<?>> parameters);
 
     public void generate();
 
