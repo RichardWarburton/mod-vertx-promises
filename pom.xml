@@ -19,6 +19,7 @@
 
     <modules>
         <module>mod-promises-java</module>
+        <module>mod-promises-plugin</module>
     </modules>
 
 </project>
