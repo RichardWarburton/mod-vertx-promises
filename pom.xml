@@ -5,7 +5,7 @@
 
     <groupId>com.insightfullogic.vertx</groupId>
     <artifactId>mod-promises-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 	<parent>
@@ -18,8 +18,8 @@
     <description>Parent for all promises codebases</description>
 
     <modules>
-        <module>mod-promises-java</module>
         <module>mod-promises-plugin</module>
+        <module>mod-promises-java</module>
     </modules>
 
 </project>

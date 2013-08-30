@@ -53,7 +53,7 @@ public class MyMojo extends AbstractMojo {
         try {
             w = new FileWriter(touch);
 
-            w.write("touch.txt");
+            w.write("foobar");
         } catch (IOException e) {
             throw new MojoExecutionException("Error creating file " + touch, e);
         } finally {

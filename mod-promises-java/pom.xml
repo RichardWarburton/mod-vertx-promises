@@ -11,7 +11,7 @@
     <parent>
         <groupId>com.insightfullogic.vertx</groupId>
         <artifactId>mod-promises-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -94,6 +94,22 @@
 
 	<build>
 		<plugins>
+            <!-- Plugin to generate java code -->
+            <plugin>
+                <groupId>com.insightfullogic.vertx</groupId>
+                <artifactId>mod-promises-plugin</artifactId>
+                <version>${project.version}</version>
+                <executions>
+                    <execution>
+                        <id>touch</id>
+                        <phase>validate</phase>
+                        <goals>
+                          <goal>touch</goal>
+                        </goals>
+<!--             <inherited>false</inherited> -->
+                    </execution>
+                </executions>
+            </plugin>
 
 			<!-- The vert.x Maven plugin -->
 			<plugin>
