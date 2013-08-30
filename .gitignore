@@ -12,3 +12,5 @@ target/
 
 mods/
 generated-sources
+
+*.swp
