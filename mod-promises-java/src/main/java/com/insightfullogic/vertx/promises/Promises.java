@@ -29,7 +29,7 @@ import com.insightfullogic.vertx.promises.impl.DefaultPromise;
  */
 public class Promises {
 
-    public static <E> Promise<E> empty() {
+    public static <E> Promise<E> defer() {
         return new DefaultPromise<>();
     }
 

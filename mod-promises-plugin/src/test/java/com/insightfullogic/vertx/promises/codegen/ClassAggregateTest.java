@@ -10,10 +10,6 @@ import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.ClassInspector;
 import com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator;
 
-/**
- * @author richard
- *
- */
 public class ClassAggregateTest {
 
 	@Test

@@ -26,22 +26,6 @@
 
 		<!--Vertx module name -->
 		<module.name>${project.groupId}~${project.artifactId}~${project.version}</module.name>
-
-		<!--Dependency versions -->
-		<vertx.version>2.0.0-final</vertx.version>
-		<vertx.testtools.version>2.0.0-final</vertx.testtools.version>
-		<junit.version>4.11</junit.version>
-
-		<!--Plugin versions -->
-		<maven.compiler.plugin.version>3.0</maven.compiler.plugin.version>
-		<maven.resources.plugin.version>2.6</maven.resources.plugin.version>
-		<maven.clean.plugin.version>2.5</maven.clean.plugin.version>
-		<maven.vertx.plugin.version>2.0.0-final</maven.vertx.plugin.version>
-		<maven.surefire.plugin.version>2.14</maven.surefire.plugin.version>
-		<maven.failsafe.plugin.version>2.14</maven.failsafe.plugin.version>
-		<maven.surefire.report.plugin.version>2.14</maven.surefire.report.plugin.version>
-		<maven.javadoc.plugin.version>2.9</maven.javadoc.plugin.version>
-		<maven.dependency.plugin.version>2.7</maven.dependency.plugin.version>
 	</properties>
 
 	<repositories>
@@ -56,40 +40,20 @@
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-core</artifactId>
-			<version>${vertx.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>vertx-platform</artifactId>
-			<version>${vertx.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<!--Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.vertx</groupId>
 			<artifactId>testtools</artifactId>
-			<version>${vertx.testtools.version}</version>
-			<scope>test</scope>
 		</dependency>
-
-        <dependency>
-        	<groupId>com.sun.codemodel</groupId>
-			<artifactId>codemodel</artifactId>
-        	<version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -132,15 +96,6 @@
 			</plugin>
 
 			<!-- Other plugins required by the build -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven.compiler.plugin.version}</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>${maven.resources.plugin.version}</version>
