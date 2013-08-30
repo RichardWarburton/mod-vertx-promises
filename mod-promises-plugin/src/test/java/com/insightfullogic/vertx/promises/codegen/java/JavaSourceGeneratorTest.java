@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.insightfullogic.vertx.promises.codegen;
+package com.insightfullogic.vertx.promises.codegen.java;
 
-import static com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator.GENERATED_SOURCES_DIR;
+import static com.insightfullogic.vertx.promises.codegen.java.JavaSourceGenerator.GENERATED_SOURCES;
 import static com.sun.codemodel.JMod.PUBLIC;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.file.Files.readAllLines;
@@ -29,7 +29,6 @@ import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
-import com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JTypeVar;
@@ -41,9 +40,12 @@ import com.sun.codemodel.JTypeVar;
 public class JavaSourceGeneratorTest {
 
 	@BeforeClass
-	public static void regenerate() {
+	public static void regenerate() throws Exception {
+	    Method send = EventBus.class.getMethod("send", String.class, JsonObject.class);
+	    
 		JavaSourceGenerator generator = new JavaSourceGenerator();
 		generator.newClass(EventBus.class);
+        generator.wrapMethod(send);
 		generator.convertMethod("registerHandler", Message.class, Arrays.<Class<?>>asList(String.class));
 		generator.generate();
 	}
@@ -78,6 +80,11 @@ public class JavaSourceGeneratorTest {
 		assertFileContains("return promise;");
 	}
 
+    @Test
+    public void wrapsMethod() throws Exception {
+        assertFileContains("public EventBus send(String param0, String param1) {");
+        assertFileContains("return eventbus.send(param0, param1);");
+    }
 
 	// Message case
 	@Test
@@ -105,8 +112,8 @@ public class JavaSourceGeneratorTest {
 	public void parameterisedGenericsAreUsedAsBounds() throws Exception {
 		JavaSourceGenerator generator = new JavaSourceGenerator();
 
-		Method unregisterHandler = EventBus.class.getMethod("send", String.class, JsonObject.class, Handler.class);
-		ParameterizedType lastType = (ParameterizedType) unregisterHandler.getGenericParameterTypes()[2];
+		Method send = EventBus.class.getMethod("send", String.class, JsonObject.class, Handler.class);
+		ParameterizedType lastType = (ParameterizedType) send.getGenericParameterTypes()[2];
 		Type bound = lastType.getActualTypeArguments()[0];
 
 		List<TypeVariable<?>> bindings = new ArrayList<>();
@@ -132,7 +139,7 @@ public class JavaSourceGeneratorTest {
 	}
 
 	public File getFile() {
-		return new File(GENERATED_SOURCES_DIR + "/com/insightfullogic/promises/impl/PromiseEventBus.java");
+		return new File("target/" + GENERATED_SOURCES + "/com/insightfullogic/vertx/promises/PromiseEventBus.java");
 	}
 
 	public void assertFileContains(String toFind) throws IOException {

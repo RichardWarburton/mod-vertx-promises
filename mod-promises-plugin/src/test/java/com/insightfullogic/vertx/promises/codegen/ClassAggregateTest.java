@@ -8,7 +8,7 @@ import org.vertx.java.core.eventbus.EventBus;
 
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.ClassInspector;
-import com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator;
+import com.insightfullogic.vertx.promises.codegen.java.JavaSourceGenerator;
 
 public class ClassAggregateTest {
 

@@ -65,10 +65,10 @@
                 <version>${project.version}</version>
                 <executions>
                     <execution>
-                        <id>touch</id>
+                        <id>generate</id>
                         <phase>validate</phase>
                         <goals>
-                          <goal>touch</goal>
+                          <goal>generate</goal>
                         </goals>
 <!--             <inherited>false</inherited> -->
                     </execution>
@@ -234,6 +234,25 @@
 		                                    <goal>
 		                                        copy-dependencies
 		                                    </goal>
+		                                </goals>
+		                            </pluginExecutionFilter>
+		                            <action>
+		                                <ignore></ignore>
+		                            </action>
+		                        </pluginExecution>
+		                        <pluginExecution>
+		                            <pluginExecutionFilter>
+		                                <groupId>
+		                                    com.insightfullogic.vertx
+		                                </groupId>
+		                                <artifactId>
+		                                    mod-promises-plugin
+		                                </artifactId>
+		                                <versionRange>
+		                                    [0.0.2-SNAPSHOT,)
+		                                </versionRange>
+		                                <goals>
+		                                    <goal>generate</goal>
 		                                </goals>
 		                            </pluginExecutionFilter>
 		                            <action>
