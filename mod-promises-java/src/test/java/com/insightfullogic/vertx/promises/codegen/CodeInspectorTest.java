@@ -1,4 +1,4 @@
-package com.insightfullogic.promises.codegen;
+package com.insightfullogic.vertx.promises.codegen;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertFalse;
@@ -15,6 +15,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
+
+import com.insightfullogic.vertx.promises.codegen.ClassInspector;
+import com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator;
 
 
 public class CodeInspectorTest {

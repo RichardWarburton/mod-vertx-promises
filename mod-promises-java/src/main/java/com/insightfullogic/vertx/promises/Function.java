@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
-
-import org.vertx.java.core.Handler;
+package com.insightfullogic.vertx.promises;
 
 /**
  * @author richard
+ *
  */
-public interface Promise<E> extends Handler<E> {
+public interface Function<F, T> {
 
-	public Promise<Void> then(Handler<E> nextAction);
-
-	public <T> Promise<T> using(Function<E, T> mapper);
-
-	public <T> Promise<T> bind(Function<E, Promise<T>> mapper);
-
-	public <R, T> Promise<T> compose(Function<E, Promise<R>> promise, Combiner<E, R, T> combiner);
-
-	public <L, R, T> Promise<T> diamond(Function<E, Promise<L>> left, Function<E, Promise<R>> right, Combiner<L, R, T> combiner);
+	public T handle (F from);
 
 }

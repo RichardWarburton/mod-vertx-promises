@@ -1,4 +1,4 @@
-package com.insightfullogic.promises.codegen;
+package com.insightfullogic.vertx.promises.codegen;
 
 import static com.sun.codemodel.JMod.FINAL;
 import static com.sun.codemodel.JMod.PRIVATE;
@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.insightfullogic.promises.Promise;
-import com.insightfullogic.promises.PromiseException;
-import com.insightfullogic.promises.impl.DefaultPromise;
+import com.insightfullogic.vertx.promises.Promise;
+import com.insightfullogic.vertx.promises.PromiseException;
+import com.insightfullogic.vertx.promises.impl.DefaultPromise;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClass;

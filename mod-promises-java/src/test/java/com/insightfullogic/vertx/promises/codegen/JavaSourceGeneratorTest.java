@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.insightfullogic.promises.codegen;
+package com.insightfullogic.vertx.promises.codegen;
 
-import static com.insightfullogic.promises.codegen.JavaSourceGenerator.GENERATED_SOURCES_DIR;
+import static com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator.GENERATED_SOURCES_DIR;
 import static com.sun.codemodel.JMod.PUBLIC;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.file.Files.readAllLines;
@@ -29,6 +29,7 @@ import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 
+import com.insightfullogic.vertx.promises.codegen.JavaSourceGenerator;
 import com.sun.codemodel.JClass;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JTypeVar;

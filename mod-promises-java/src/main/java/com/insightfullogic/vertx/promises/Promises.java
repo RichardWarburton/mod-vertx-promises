@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.vertx.java.core.Handler;
 
-import com.insightfullogic.promises.impl.DefaultPromise;
+import com.insightfullogic.vertx.promises.impl.DefaultPromise;
 
 /**
  * Factory for Promises instances

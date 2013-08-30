@@ -13,26 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
-
-import org.vertx.java.core.Vertx;
-
-import com.insightfullogic.promises.impl.DefaultPromiseEventBus;
+package com.insightfullogic.vertx.promises;
 
 /**
  * @author richard
  *
  */
-public class PromiseVertx {
+public interface Combiner<L, R, T> {
 
-	private final Vertx vertx;
-
-	public PromiseVertx(final Vertx vertx) {
-		this.vertx = vertx;
-	}
-
-	public PromiseEventBus promiseBus() {
-		return new DefaultPromiseEventBus(vertx.eventBus());
-	}
+	public Promise<T> combine(L left, R right);
 
 }

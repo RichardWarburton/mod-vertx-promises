@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises.impl;
+package com.insightfullogic.vertx.promises.impl;
 
 import org.vertx.java.core.Handler;
 
-import com.insightfullogic.promises.Combiner;
-import com.insightfullogic.promises.Function;
-import com.insightfullogic.promises.Promise;
+import com.insightfullogic.vertx.promises.Combiner;
+import com.insightfullogic.vertx.promises.Function;
+import com.insightfullogic.vertx.promises.Promise;
 
 /**
  * @author richard
@@ -54,7 +54,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see com.insightfullogic.promises.Promise#compose(com.insightfullogic.promises.Promise, com.insightfullogic.promises.Combiner)
+	 * @see com.insightfullogic.vertx.promises.Promise#compose(com.insightfullogic.vertx.promises.Promise, com.insightfullogic.vertx.promises.Combiner)
 	 */
 	@Override
 	public <R, T> Promise<T> compose(final Function<E, Promise<R>> nextAction, final Combiner<E, R, T> combiner) {
@@ -118,7 +118,7 @@ public class DefaultPromise<E> implements Promise<E> {
 
 
 	/**
-	 * @see com.insightfullogic.promises.Promise#then(org.vertx.java.core.Handler)
+	 * @see com.insightfullogic.vertx.promises.Promise#then(org.vertx.java.core.Handler)
 	 */
 	@Override
 	public Promise<Void> then(final Handler<E> nextAction) {
@@ -134,7 +134,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see com.insightfullogic.promises.Promise#using(com.insightfullogic.promises.Function)
+	 * @see com.insightfullogic.vertx.promises.Promise#using(com.insightfullogic.vertx.promises.Function)
 	 */
 	@Override
 	public <T> Promise<T> using(final Function<E, T> mapper) {
@@ -150,7 +150,7 @@ public class DefaultPromise<E> implements Promise<E> {
 	}
 
 	/**
-	 * @see com.insightfullogic.promises.Promise#bind(com.insightfullogic.promises.Function)
+	 * @see com.insightfullogic.vertx.promises.Promise#bind(com.insightfullogic.vertx.promises.Function)
 	 */
 	@Override
 	public <T> Promise<T> bind(final Function<E, Promise<T>> mapper) {

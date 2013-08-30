@@ -1,4 +1,4 @@
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
 
 public class PromiseException extends RuntimeException {
 

@@ -13,28 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.platform.Container;
-
-import com.insightfullogic.promises.impl.DefaultPromise;
+import org.vertx.java.core.Handler;
 
 /**
  * @author richard
  */
-public class PromiseContainer {
+public interface Promise<E> extends Handler<E> {
 
-	private final Container container;
+	public Promise<Void> then(Handler<E> nextAction);
 
-	public PromiseContainer(final Container container) {
-		this.container = container;
-	}
+	public <T> Promise<T> using(Function<E, T> mapper);
 
-	public Promise<AsyncResult<String>> deployVerticle(final String main) {
-		final Promise<AsyncResult<String>> donePromise = new DefaultPromise<AsyncResult<String>>();
-		container.deployVerticle(main, donePromise);
-		return donePromise;
-	}
+	public <T> Promise<T> bind(Function<E, Promise<T>> mapper);
+
+	public <R, T> Promise<T> compose(Function<E, Promise<R>> promise, Combiner<E, R, T> combiner);
+
+	public <L, R, T> Promise<T> diamond(Function<E, Promise<L>> left, Function<E, Promise<R>> right, Combiner<L, R, T> combiner);
 
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises.unit;
+package com.insightfullogic.vertx.promises.unit;
 
 import static org.vertx.testtools.VertxAssert.assertEquals;
 import static org.vertx.testtools.VertxAssert.assertTrue;
@@ -25,12 +25,12 @@ import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.testtools.TestVerticle;
 
-import com.insightfullogic.promises.Combiner;
-import com.insightfullogic.promises.Function;
-import com.insightfullogic.promises.Promise;
-import com.insightfullogic.promises.PromiseContainer;
-import com.insightfullogic.promises.PromiseEventBus;
-import com.insightfullogic.promises.PromiseVertx;
+import com.insightfullogic.vertx.promises.Combiner;
+import com.insightfullogic.vertx.promises.Function;
+import com.insightfullogic.vertx.promises.Promise;
+import com.insightfullogic.vertx.promises.PromiseContainer;
+import com.insightfullogic.vertx.promises.PromiseEventBus;
+import com.insightfullogic.vertx.promises.PromiseVertx;
 
 /**
  * @author richard

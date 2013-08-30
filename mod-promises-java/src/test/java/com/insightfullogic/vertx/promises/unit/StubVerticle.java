@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises.unit;
+package com.insightfullogic.vertx.promises.unit;
 
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;

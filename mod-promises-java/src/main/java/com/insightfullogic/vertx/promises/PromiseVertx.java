@@ -13,25 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.Vertx;
+
+import com.insightfullogic.vertx.promises.impl.DefaultPromiseEventBus;
 
 /**
  * @author richard
  *
  */
-public interface PromiseEventBus {
+public class PromiseVertx {
 
-	Promise<Message<String>> send(String address, String message);
+	private final Vertx vertx;
 
-	@SuppressWarnings("rawtypes")
-	Promise<? extends Message> registerHandler(String address);
+	public PromiseVertx(final Vertx vertx) {
+		this.vertx = vertx;
+	}
 
-	// TODO: take a handler of promise, as an argument, and return the result as a promise.
-	@SuppressWarnings("rawtypes")
-	Promise<AsyncResult<Void>> registerHandler(final String address, Handler<? extends Message> handler);
+	public PromiseEventBus promiseBus() {
+		return new DefaultPromiseEventBus(vertx.eventBus());
+	}
 
 }

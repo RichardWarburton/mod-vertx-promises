@@ -13,14 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
+
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.platform.Container;
+
+import com.insightfullogic.vertx.promises.impl.DefaultPromise;
 
 /**
  * @author richard
- *
  */
-public interface Function<F, T> {
+public class PromiseContainer {
 
-	public T handle (F from);
+	private final Container container;
+
+	public PromiseContainer(final Container container) {
+		this.container = container;
+	}
+
+	public Promise<AsyncResult<String>> deployVerticle(final String main) {
+		final Promise<AsyncResult<String>> donePromise = new DefaultPromise<AsyncResult<String>>();
+		container.deployVerticle(main, donePromise);
+		return donePromise;
+	}
 
 }

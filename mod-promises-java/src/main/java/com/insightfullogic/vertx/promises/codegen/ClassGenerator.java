@@ -1,4 +1,4 @@
-package com.insightfullogic.promises.codegen;
+package com.insightfullogic.vertx.promises.codegen;
 
 import java.lang.reflect.Type;
 import java.util.List;

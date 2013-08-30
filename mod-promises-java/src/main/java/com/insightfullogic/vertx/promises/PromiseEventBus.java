@@ -13,14 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises;
+package com.insightfullogic.vertx.promises;
+
+import org.vertx.java.core.AsyncResult;
+import org.vertx.java.core.Handler;
+import org.vertx.java.core.eventbus.Message;
 
 /**
  * @author richard
  *
  */
-public interface Combiner<L, R, T> {
+public interface PromiseEventBus {
 
-	public Promise<T> combine(L left, R right);
+	Promise<Message<String>> send(String address, String message);
+
+	@SuppressWarnings("rawtypes")
+	Promise<? extends Message> registerHandler(String address);
+
+	// TODO: take a handler of promise, as an argument, and return the result as a promise.
+	@SuppressWarnings("rawtypes")
+	Promise<AsyncResult<Void>> registerHandler(final String address, Handler<? extends Message> handler);
 
 }

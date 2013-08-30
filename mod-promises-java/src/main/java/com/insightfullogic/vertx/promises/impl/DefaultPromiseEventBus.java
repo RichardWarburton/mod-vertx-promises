@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.promises.impl;
+package com.insightfullogic.vertx.promises.impl;
 
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 
-import com.insightfullogic.promises.Promise;
-import com.insightfullogic.promises.PromiseEventBus;
+import com.insightfullogic.vertx.promises.Promise;
+import com.insightfullogic.vertx.promises.PromiseEventBus;
 
 /**
  * @author richard
@@ -36,7 +36,7 @@ public class DefaultPromiseEventBus implements PromiseEventBus {
 	}
 
 	/**
-	 * @see com.insightfullogic.promises.PromiseEventBus#send(java.lang.String, java.lang.String)
+	 * @see com.insightfullogic.vertx.promises.PromiseEventBus#send(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Promise<Message<String>> send(final String address, final String message) {
@@ -46,7 +46,7 @@ public class DefaultPromiseEventBus implements PromiseEventBus {
 	}
 
 	/**
-	 * @see com.insightfullogic.promises.PromiseEventBus#registerHandler(java.lang.String)
+	 * @see com.insightfullogic.vertx.promises.PromiseEventBus#registerHandler(java.lang.String)
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
