@@ -76,7 +76,7 @@ public class JavaSourceGeneratorTest {
 	@Test
 	public void generatesBinding() throws IOException {
 	    assertFileContains("Promise<Message> promise = new DefaultPromise<>();");
-		assertFileContains("promise.registerHandler(param0, promise);");
+		assertFileContains("eventbus.registerHandler(param0, promise);");
 		assertFileContains("return promise;");
 	}
 

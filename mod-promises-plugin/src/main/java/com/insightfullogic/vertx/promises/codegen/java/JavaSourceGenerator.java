@@ -144,7 +144,7 @@ public class JavaSourceGenerator implements ClassGenerator {
         JClass implType = defaultPromise.narrow(Collections.<JClass> emptyList());
         JVar promiseVar = body.decl(returnType, "promise", JExpr._new(implType));
 
-        generateBindingInvoke(name, parameters, body, wrappedField);
+        generateBindingInvoke(name, parameters, body, wrappedField, promiseVar);
 
         // Eg: return promise;
         body._return(promiseVar);
@@ -197,11 +197,11 @@ public class JavaSourceGenerator implements ClassGenerator {
         return directClass(cls.getName());
     }
 
-    public JInvocation generateBindingInvoke(String name, List<JVar> parameters, JBlock body, JVar var) {
+    public JInvocation generateBindingInvoke(String name, List<JVar> parameters, JBlock body, JVar var, JVar finalArg) {
         // Eg: eventBus.registerHandler(address, promise);
         JInvocation invoke = body.invoke(var, name);
         invokeParameters(parameters, invoke);
-        invoke.arg(var);
+        invoke.arg(finalArg);
         return invoke;
     }
 
