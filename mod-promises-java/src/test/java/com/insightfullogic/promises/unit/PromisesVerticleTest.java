@@ -22,7 +22,6 @@ import static org.vertx.testtools.VertxAssert.testComplete;
 import org.junit.Test;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
-import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.testtools.TestVerticle;
 
