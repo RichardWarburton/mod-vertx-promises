@@ -1,6 +1,18 @@
+
 {
     "org.vertx.java.core.eventbus.EventBus": {
         "send": ["address", "message"],
         "registerHandler": ["address"]
+    },
+    "org.vertx.java.platform.Verticle": {
+        "start": ["startedResult"],
+        "setContainer": ["container"],
+        "setVertx": ["vertx"]
+    },
+    "org.vertx.java.platform.Container": {
+        "deployWorkerVerticle": ["main", "config", "instances", "multiThreaded"],
+        "deployModule": ["moduleName", "config", "instances"],
+        "deployVerticle": ["moduleName", "config", "instances"],
+        "undeployModule": ["deploymentID"]
     }
 }
