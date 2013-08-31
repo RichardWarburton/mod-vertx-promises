@@ -1,0 +1,6 @@
+{
+    "org.vertx.java.core.eventbus.EventBus": {
+        "send": ["address", "message"],
+        "registerHandler": ["address"]
+    }
+}

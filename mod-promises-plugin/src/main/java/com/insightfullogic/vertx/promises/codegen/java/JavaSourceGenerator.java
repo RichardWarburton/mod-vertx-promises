@@ -6,7 +6,6 @@ import static com.sun.codemodel.JMod.PUBLIC;
 import static java.util.Arrays.asList;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -14,7 +13,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +21,7 @@ import java.util.Map;
 
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.CodegenException;
+import com.insightfullogic.vertx.promises.codegen.ParameterNames;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JBlock;
 import com.sun.codemodel.JClass;
@@ -30,7 +29,6 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JExpression;
 import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
@@ -54,6 +52,7 @@ public class JavaSourceGenerator implements ClassGenerator {
     private final String classPrefix;
     private final File target;
     private final Map<String, JClass> classCache;
+    private final ParameterNames parameterNames;
 
     private JDefinedClass klass;
     private JFieldVar wrappedField;
@@ -75,6 +74,7 @@ public class JavaSourceGenerator implements ClassGenerator {
         code = new JCodeModel();
         promise = directClass(pkgName + PROMISE);
         defaultPromise = directClass(pkgName + DEFAULT_PROMISE);
+        parameterNames = new ParameterNames("java.json");
     }
 
     @Override
@@ -213,14 +213,18 @@ public class JavaSourceGenerator implements ClassGenerator {
 
     public List<JVar> generateParameters(List<Class<?>> parameters, JMethod method) {
         List<JVar> parameterRefs = new ArrayList<>();
+        List<String> names = parameterNames.getNames(wrappedField.type().fullName(), method.name());
         for (int i = 0; i < parameters.size(); i++) {
-            parameterRefs.add(method.param(parameters.get(i), paramName(i)));
+            parameterRefs.add(method.param(parameters.get(i), paramName(names, i)));
         }
         return parameterRefs;
     }
 
-    public String paramName(int i) {
-        return "param" + i;
+    public String paramName(List<String> names, int i) {
+        if (names == null)
+            return "param" + i;
+        
+        return names.get(i);
     }
 
     @Override

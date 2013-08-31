@@ -77,22 +77,22 @@ public class JavaSourceGeneratorTest {
 	@Test
 	public void generatesBinding() throws IOException {
 	    assertFileContains("Promise<Message> promise = new DefaultPromise<>();");
-		assertFileContains("eventbus.registerHandler(param0, promise);");
+		assertFileContains("eventbus.registerHandler(address, promise);");
 		assertFileContains("return promise;");
 	}
 	
 	@Test
     public void generatesNonStringBinding() throws IOException {
-        assertFileContains("public Promise<Message> send(String param0, JsonObject param1) {");
+        assertFileContains("public Promise<Message> send(String address, JsonObject message) {");
         assertFileContains("Promise<Message> promise = new DefaultPromise<>();");
-        assertFileContains("eventbus.send(param0, param1, promise);");
+        assertFileContains("eventbus.send(address, message, promise);");
         assertFileContains("return promise;");
     }
 
     @Test
     public void wrapsMethod() throws Exception {
-        assertFileContains("public EventBus send(String param0, JsonObject param1) {");
-        assertFileContains("return eventbus.send(param0, param1);");
+        assertFileContains("public EventBus send(String address, JsonObject message) {");
+        assertFileContains("return eventbus.send(address, message);");
     }
 
 	// Message case
