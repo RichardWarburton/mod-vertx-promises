@@ -30,7 +30,7 @@ public class ClassInspector {
 	public void inspectMethod(Method method) {
 		List<Class<?>> parameterTypes = new ArrayList<>(asList(method.getParameterTypes()));
 		if (!requiresConversion(parameterTypes)) {
-			// TODO: wrap method
+			backend.wrapMethod(method);
 		    return;
 		}
 

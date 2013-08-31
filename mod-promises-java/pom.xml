@@ -63,6 +63,9 @@
                 <groupId>com.insightfullogic.vertx</groupId>
                 <artifactId>mod-promises-plugin</artifactId>
                 <version>${project.version}</version>
+                <configuration>
+                    <languageModule>com.insightfullogic.vertx.promises.codegen.java.JavaLanguageModule</languageModule>
+                </configuration>
                 <executions>
                     <execution>
                         <id>generate</id>

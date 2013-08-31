@@ -5,7 +5,7 @@ import java.io.File;
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.LanguageModule;
 
-public class JavaSourceGeneratorFactory implements LanguageModule {
+public class JavaLanguageModule implements LanguageModule {
 
     @Override
     public ClassGenerator makeGenerator(File target) {

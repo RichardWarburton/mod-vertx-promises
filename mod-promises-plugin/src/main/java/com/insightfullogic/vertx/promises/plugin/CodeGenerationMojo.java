@@ -28,7 +28,7 @@ import com.insightfullogic.vertx.promises.codegen.Api;
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.ClassInspector;
 import com.insightfullogic.vertx.promises.codegen.LanguageModule;
-import com.insightfullogic.vertx.promises.codegen.java.JavaSourceGeneratorFactory;
+import com.insightfullogic.vertx.promises.codegen.java.JavaLanguageModule;
 
 /**
  * Goal which touches a timestamp file.
@@ -47,22 +47,31 @@ public class CodeGenerationMojo extends AbstractMojo {
      */
     private File outputDirectory;
 
+    /**
+     * @parameter
+     * @required
+     */
+    private String languageModule;
+
     public void execute() throws MojoExecutionException {
         ensureDirectoryExists();
-        for (LanguageModule languageModule : makeLanguageModules()) {
-            ClassGenerator generator = languageModule.makeGenerator(outputDirectory);
-            for (Class<?> klass : Api.INST.classes) {
-                ClassInspector inspector = new ClassInspector(klass, generator);
-                inspector.inspect();
-            }
-            generator.generate();
+        LanguageModule languageModule = getLanguageModule();
+        ClassGenerator generator = languageModule.makeGenerator(outputDirectory);
+        for (Class<?> klass : Api.INST.classes) {
+            ClassInspector inspector = new ClassInspector(klass, generator);
+            inspector.inspect();
         }
+        generator.generate();
     }
 
-    private List<LanguageModule> makeLanguageModules() {
-        return Arrays.<LanguageModule>asList(
-            new JavaSourceGeneratorFactory()
-        );
+    @SuppressWarnings("unchecked")
+    private LanguageModule getLanguageModule() throws MojoExecutionException {
+        try {
+            Class<LanguageModule> moduleClass = (Class<LanguageModule>) Class.forName(languageModule);
+            return moduleClass.newInstance();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
     }
 
     private void ensureDirectoryExists() {
