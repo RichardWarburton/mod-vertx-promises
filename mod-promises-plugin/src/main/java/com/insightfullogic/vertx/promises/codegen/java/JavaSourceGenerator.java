@@ -214,7 +214,7 @@ public class JavaSourceGenerator implements ClassGenerator {
     public List<JVar> generateParameters(List<Class<?>> parameters, JMethod method) {
         List<JVar> parameterRefs = new ArrayList<>();
         for (int i = 0; i < parameters.size(); i++) {
-            parameterRefs.add(method.param(parameters.get(0), paramName(i)));
+            parameterRefs.add(method.param(parameters.get(i), paramName(i)));
         }
         return parameterRefs;
     }

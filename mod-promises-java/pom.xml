@@ -84,7 +84,7 @@
 				<artifactId>vertx-maven-plugin</artifactId>
 				<version>${maven.vertx.plugin.version}</version>
 				<!-- You can specify extra config to the plugin as required here <configuration> 
-					<configFile>/path/to/MyVerticle.conf</configFile> <instances>1</instances> 
+					<configFile>/path/to/MyVerticle.conf</configFile> <instances>1</instances>
 					<classpath>src/main/resources/:src/test/resources/:target/classes/:target/test-classes/</classpath> 
 					</configuration> -->
 				<executions>

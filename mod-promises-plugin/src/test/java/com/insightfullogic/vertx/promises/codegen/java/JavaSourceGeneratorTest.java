@@ -42,10 +42,11 @@ public class JavaSourceGeneratorTest {
 	@BeforeClass
 	public static void regenerate() throws Exception {
 	    Method send = EventBus.class.getMethod("send", String.class, JsonObject.class);
-	    
+
 		JavaSourceGenerator generator = new JavaSourceGenerator();
 		generator.newClass(EventBus.class);
         generator.wrapMethod(send);
+        generator.convertMethod("send", Message.class, Arrays.<Class<?>>asList(String.class, JsonObject.class));
 		generator.convertMethod("registerHandler", Message.class, Arrays.<Class<?>>asList(String.class));
 		generator.generate();
 	}
@@ -79,10 +80,18 @@ public class JavaSourceGeneratorTest {
 		assertFileContains("eventbus.registerHandler(param0, promise);");
 		assertFileContains("return promise;");
 	}
+	
+	@Test
+    public void generatesNonStringBinding() throws IOException {
+        assertFileContains("public Promise<Message> send(String param0, JsonObject param1) {");
+        assertFileContains("Promise<Message> promise = new DefaultPromise<>();");
+        assertFileContains("eventbus.send(param0, param1, promise);");
+        assertFileContains("return promise;");
+    }
 
     @Test
     public void wrapsMethod() throws Exception {
-        assertFileContains("public EventBus send(String param0, String param1) {");
+        assertFileContains("public EventBus send(String param0, JsonObject param1) {");
         assertFileContains("return eventbus.send(param0, param1);");
     }
 

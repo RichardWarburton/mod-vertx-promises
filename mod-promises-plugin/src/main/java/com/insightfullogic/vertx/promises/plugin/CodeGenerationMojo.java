@@ -17,18 +17,14 @@ package com.insightfullogic.vertx.promises.plugin;
  */
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 
 import com.insightfullogic.vertx.promises.codegen.Api;
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.ClassInspector;
 import com.insightfullogic.vertx.promises.codegen.LanguageModule;
-import com.insightfullogic.vertx.promises.codegen.java.JavaLanguageModule;
 
 /**
  * Goal which touches a timestamp file.
