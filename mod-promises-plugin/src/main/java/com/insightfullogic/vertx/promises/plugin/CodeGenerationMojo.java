@@ -52,7 +52,7 @@ public class CodeGenerationMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         ensureDirectoryExists();
         LanguageModule languageModule = getLanguageModule();
-        ClassGenerator generator = languageModule.makeGenerator(outputDirectory);
+        ClassGenerator generator = languageModule.makeGenerator(outputDirectory, Api.INST.classes);
         for (Class<?> klass : Api.INST.classes) {
             ClassInspector inspector = new ClassInspector(klass, generator);
             inspector.inspect();

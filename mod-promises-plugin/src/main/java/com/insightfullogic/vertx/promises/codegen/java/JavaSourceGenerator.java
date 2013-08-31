@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.insightfullogic.vertx.promises.codegen.ClassGenerator;
 import com.insightfullogic.vertx.promises.codegen.CodegenException;
@@ -53,20 +54,22 @@ public class JavaSourceGenerator implements ClassGenerator {
     private final File target;
     private final Map<String, JClass> classCache;
     private final ParameterNames parameterNames;
+    private final Set<Class<?>> wrappedClasses;
 
     private JDefinedClass klass;
     private JFieldVar wrappedField;
 
     public JavaSourceGenerator() {
-        this(new File("target/"));
+        this(new File("target/"), Collections.<Class<?>>emptySet());
     }
     
-    public JavaSourceGenerator(File target) {
-        this(target, DEFAULT_PKG, DEFAULT_PREFIX);
+    public JavaSourceGenerator(File target, Set<Class<?>> wrappedClasses) {
+        this(target, wrappedClasses, DEFAULT_PKG, DEFAULT_PREFIX);
     }
 
     // TODO: common package prefix
-    public JavaSourceGenerator(File target, String pkgName, String classPrefix) {
+    public JavaSourceGenerator(File target, Set<Class<?>> wrappedClasses, String pkgName, String classPrefix) {
+        this.wrappedClasses = wrappedClasses;
         classCache = new HashMap<String, JClass>();
         this.target = target;
         this.pkgName = pkgName;
@@ -106,18 +109,29 @@ public class JavaSourceGenerator implements ClassGenerator {
     @Override
     public void wrapMethod(Method wrappedMethod) {
         String name = wrappedMethod.getName();
-        JClass returnType = directClass(wrappedMethod.getReturnType().getName());
-        JMethod method = klass.method(PUBLIC, returnType, name);
+        Class<?> returnType = wrappedMethod.getReturnType();
+        boolean needsRemapping = wrappedClasses.contains(returnType) && name.startsWith("get");
+        JClass returnClass = needsRemapping ? remappedClass(returnType)
+                                            : directClass(returnType.getName());
+        JMethod method = klass.method(PUBLIC, returnClass, name);
         List<JVar> parameters = generateParameters(asList(wrappedMethod.getParameterTypes()), method);
         JBlock body = method.body();
         JInvocation invoke = JExpr.invoke(wrappedField, method);
         invokeParameters(parameters, invoke);
+        if (needsRemapping) {
+            invoke = JExpr._new(returnClass)
+                          .arg(invoke);
+        }
+        
         body._return(invoke);
     }
-
+    
+    private JClass remappedClass(Class<?> type) {
+        return directClass(pkgName + "." + classPrefix + type.getSimpleName());
+    }
+    
     // Caching means we get automated imports
     private JClass directClass(String name) {
-        // TODO: name remapping to generated classes here
         JClass jClass = classCache.get(name);
         if (jClass == null) {
             jClass = code.directClass(name);
