@@ -29,7 +29,7 @@ public class ClassInspector {
 
 	public void inspectMethod(Method method) {
 		List<Class<?>> parameterTypes = new ArrayList<>(asList(method.getParameterTypes()));
-		if (!requiresConversion(parameterTypes)) {
+		if (!requiresConversion(parameterTypes) && !wouldCauseClash(method)) {
 			backend.wrapMethod(method);
 		    return;
 		}
@@ -50,6 +50,18 @@ public class ClassInspector {
 		backend.convertMethod(method.getName(), returnBound, parameterTypes);
 
 		return;
+	}
+
+	private boolean wouldCauseClash(Method method) {
+		List<Class<?>> actualParameterTypes = new ArrayList<>(asList(method.getParameterTypes()));
+		actualParameterTypes.add(Handler.class);
+		Class<?>[] clashingParameterTypes = actualParameterTypes.toArray(new Class<?>[0]);
+		try {
+			klass.getMethod(method.getName(), clashingParameterTypes);
+			return true;
+		} catch (NoSuchMethodException | SecurityException e) {
+			return false;
+		}
 	}
 
 	public Type getReturnBound(Type lastType) {
