@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.insightfullogic.vertx.promises;
+package com.insightfullogic.vertx.promises.prototype;
 
-import org.vertx.java.core.AsyncResult;
-import org.vertx.java.platform.Container;
+import org.vertx.java.core.Vertx;
 
-import com.insightfullogic.vertx.promises.impl.DefaultPromise;
 
 /**
  * @author richard
+ *
  */
-public class PromiseContainer {
+public class PromiseVertx {
 
-	private final Container container;
+	private final Vertx vertx;
 
-	public PromiseContainer(final Container container) {
-		this.container = container;
+	public PromiseVertx(final Vertx vertx) {
+		this.vertx = vertx;
 	}
 
-	public Promise<AsyncResult<String>> deployVerticle(final String main) {
-		final Promise<AsyncResult<String>> donePromise = new DefaultPromise<AsyncResult<String>>();
-		container.deployVerticle(main, donePromise);
-		return donePromise;
+	public PromiseEventBus promiseBus() {
+		return new DefaultPromiseEventBus(vertx.eventBus());
 	}
 
 }

@@ -40,10 +40,10 @@ public class JavaSourceGenerator implements ClassGenerator {
 
     public static final String DEFAULT_PKG = "com.insightfullogic.vertx.promises";
     public static final String DEFAULT_PREFIX = "Promise";
-    public static final String GENERATED_SOURCES = "generated-sources";
+    public static final String GENERATED_SOURCES = "generated-sources/java";
 
     private static final String PROMISE = ".Promise";
-    private static final String DEFAULT_PROMISE = ".DefaultPromise";
+    private static final String DEFAULT_PROMISE = ".impl.DefaultPromise";
 
     final JCodeModel code;
 
@@ -62,7 +62,7 @@ public class JavaSourceGenerator implements ClassGenerator {
     public JavaSourceGenerator() {
         this(new File("target/"), Collections.<Class<?>>emptySet());
     }
-    
+
     public JavaSourceGenerator(File target, Set<Class<?>> wrappedClasses) {
         this(target, wrappedClasses, DEFAULT_PKG, DEFAULT_PREFIX);
     }
@@ -122,14 +122,14 @@ public class JavaSourceGenerator implements ClassGenerator {
             invoke = JExpr._new(returnClass)
                           .arg(invoke);
         }
-        
+
         body._return(invoke);
     }
-    
+
     private JClass remappedClass(Class<?> type) {
         return directClass(pkgName + "." + classPrefix + type.getSimpleName());
     }
-    
+
     // Caching means we get automated imports
     private JClass directClass(String name) {
         JClass jClass = classCache.get(name);
@@ -235,9 +235,10 @@ public class JavaSourceGenerator implements ClassGenerator {
     }
 
     public String paramName(List<String> names, int i) {
-        if (names == null)
-            return "param" + i;
-        
+        if (names == null) {
+			return "param" + i;
+		}
+
         return names.get(i);
     }
 
@@ -247,7 +248,7 @@ public class JavaSourceGenerator implements ClassGenerator {
             File generatedSourcesDir = new File(target, GENERATED_SOURCES);
 
             deleteRecursive(generatedSourcesDir);
-            generatedSourcesDir.mkdir();
+            generatedSourcesDir.mkdirs();
 
             code.build(generatedSourcesDir);
         } catch (IOException e) {

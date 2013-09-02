@@ -28,9 +28,9 @@ import org.vertx.testtools.TestVerticle;
 import com.insightfullogic.vertx.promises.Combiner;
 import com.insightfullogic.vertx.promises.Function;
 import com.insightfullogic.vertx.promises.Promise;
-import com.insightfullogic.vertx.promises.PromiseContainer;
-import com.insightfullogic.vertx.promises.PromiseEventBus;
-import com.insightfullogic.vertx.promises.PromiseVertx;
+import com.insightfullogic.vertx.promises.prototype.PromiseContainer;
+import com.insightfullogic.vertx.promises.prototype.PromiseEventBus;
+import com.insightfullogic.vertx.promises.prototype.PromiseVertx;
 
 /**
  * @author richard

@@ -31,7 +31,7 @@ import com.insightfullogic.vertx.promises.codegen.LanguageModule;
  * 
  * @goal generate
  * 
- * @phase validate
+ * @phase generate-sources
  */
 public class CodeGenerationMojo extends AbstractMojo {
     
