@@ -67,7 +67,6 @@ public class JavaSourceGenerator implements ClassGenerator {
         this(target, wrappedClasses, DEFAULT_PKG, DEFAULT_PREFIX);
     }
 
-    // TODO: common package prefix
     public JavaSourceGenerator(File target, Set<Class<?>> wrappedClasses, String pkgName, String classPrefix) {
         this.wrappedClasses = wrappedClasses;
         classCache = new HashMap<String, JClass>();
@@ -110,20 +109,25 @@ public class JavaSourceGenerator implements ClassGenerator {
     public void wrapMethod(Method wrappedMethod) {
         String name = wrappedMethod.getName();
         Class<?> returnType = wrappedMethod.getReturnType();
+
+        boolean returnsVoid = Void.TYPE == returnType;
         boolean needsRemapping = wrappedClasses.contains(returnType) && name.startsWith("get");
         JClass returnClass = needsRemapping ? remappedClass(returnType)
                                             : directClass(returnType.getName());
         JMethod method = klass.method(PUBLIC, returnClass, name);
         List<JVar> parameters = generateParameters(asList(wrappedMethod.getParameterTypes()), method);
         JBlock body = method.body();
-        JInvocation invoke = JExpr.invoke(wrappedField, method);
+        JInvocation invoke = returnsVoid ? body.invoke(wrappedField, method)
+        								 : JExpr.invoke(wrappedField, method);
         invokeParameters(parameters, invoke);
         if (needsRemapping) {
             invoke = JExpr._new(returnClass)
                           .arg(invoke);
         }
 
-        body._return(invoke);
+        if (!returnsVoid) {
+			body._return(invoke);
+		}
     }
 
     private JClass remappedClass(Class<?> type) {
