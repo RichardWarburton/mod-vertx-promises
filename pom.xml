@@ -8,11 +8,14 @@
     <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <!--
+    TODO: re-enable this once ready to go public
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>7</version>
 	</parent>
+    -->
 
     <name>Promises Parent</name>
     <description>Parent for all promises codebases</description>
@@ -119,5 +122,16 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>jclarity-central</id>
+            <url>http://ci.jclarity.com:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>jclarity-central</id>
+            <url>http://ci.jclarity.com:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
