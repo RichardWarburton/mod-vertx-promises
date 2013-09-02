@@ -15,16 +15,13 @@
  */
 package com.insightfullogic.vertx.promises;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.vertx.java.core.Handler;
 
 import com.insightfullogic.vertx.promises.impl.DefaultPromise;
 
 /**
  * Factory for Promises instances
- * 
+ *
  * @author richard
  */
 public class Promises {
@@ -40,14 +37,14 @@ public class Promises {
     /**
      * This blocks, it really shouldn't.  Undecided as to the best way to handle this.
      */
-    public static <E> Promise<E> from(Future<E> future) {
-        DefaultPromise<E> promise = new DefaultPromise<>();
-        try {
-            promise.handle(future.get());
-        } catch (InterruptedException | ExecutionException e) {
-            throw new PromiseException(e);
-        }
-        return promise;
-    }
+//    public static <E> Promise<E> from(Future<E> future) {
+//        DefaultPromise<E> promise = new DefaultPromise<>();
+//        try {
+//            promise.handle(future.get());
+//        } catch (InterruptedException | ExecutionException e) {
+//            throw new PromiseException(e);
+//        }
+//        return promise;
+//    }
 
 }
